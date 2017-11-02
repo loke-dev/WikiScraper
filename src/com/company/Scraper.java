@@ -12,14 +12,14 @@ import java.util.regex.Pattern;
 class Scraper {
     private Writer writer;
     private Pattern hrefPattern = Pattern.compile("href=\"(.*?)\"");
-    private Pattern validPattern = Pattern.compile("^\\/wiki\\/(\\w*\\(*\\)*\\/*%*\\,*\\!*\\.*\\-*)*");
+    private Pattern validPattern = Pattern.compile("^/wiki/(\\w*\\(*\\)*/*%*,*!*\\.*-*)*");
 
     Scraper() {
         writer = new Writer();
     }
 
     void links(String baseURL, String fileURL, String category) throws IOException {
-        String fileName = fileURL.substring(fileURL.lastIndexOf("/") + 1, fileURL.indexOf("."));
+        String fileName = fileURL.substring(fileURL.lastIndexOf("/") + 1, fileURL.lastIndexOf("."));
         String URL = baseURL + "/Links/" + category + "/" + fileName + ".txt";
         StringBuilder contents = new StringBuilder();
         HashSet<String> set = new HashSet<>();
