@@ -3,14 +3,17 @@ package com.company;
 import java.io.File;
 
 class Builder {
-    void main() {
+    Builder() {
         createRootFolder();
-        createSubFolders("Words");
+        createSubFolders("HTML");
         createSubFolders("Links");
-        createCategory("Links", "Programming");
-        createCategory("Links", "Games");
-        createCategory("Words", "Programming");
-        createCategory("Words", "Games");
+        createSubFolders("Words");
+    }
+
+    void structure(String category) {
+        createCategory("Links", category);
+        createCategory("HTML", category);
+        createCategory("Words", category);
     }
 
     private void createRootFolder() {

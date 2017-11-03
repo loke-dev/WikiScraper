@@ -50,8 +50,22 @@ class Scraper {
     }
 
     void words(String baseURL, String pageURL, String category) throws IOException {
+//        String fileName = pageURL.substring(pageURL.lastIndexOf("/") + 1);
+//        String URL = baseURL + "/Words/" + category + "/" + fileName + ".txt";
+//        StringBuilder contents = new StringBuilder();
+//        java.net.URL url = new URL("https://en.wikipedia.org" + pageURL);
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+//        String line;
+//        while ((line = reader.readLine()) != null) {
+//            contents.append(line).append("\n");
+//        }
+//        reader.close();
+//        writer.stringToFile(contents.toString(), URL);
+    }
+
+    void html(String baseURL, String pageURL, String category) throws IOException {
         String fileName = pageURL.substring(pageURL.lastIndexOf("/") + 1);
-        String URL = baseURL + "/Words/" + category + "/" + fileName + ".txt";
+        String URL = baseURL + "/HTML/" + category + "/" + fileName + ".txt";
         StringBuilder contents = new StringBuilder();
         java.net.URL url = new URL("https://en.wikipedia.org" + pageURL);
         BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));

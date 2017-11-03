@@ -10,17 +10,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 class Writer {
-    List<String> getListOfURLs(String fileURL) {
-        List<String> list = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(fileURL))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                list.add(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return list;
+    List<String> getListOfURLs(String fileURL) throws IOException {
+//        List<String> list = new ArrayList<>();
+//        try (BufferedReader br = new BufferedReader(new FileReader(fileURL))) {
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                list.add(line);
+//            }
+//            br.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return list;
+        return Files.lines(Paths.get(fileURL)).collect(Collectors.toList());
     }
 
     List<Path> getURL(String baseURL, String folder) throws IOException {
@@ -30,22 +32,15 @@ class Writer {
     }
 
     void setToFile(HashSet set, String URL) throws IOException {
-        String output = setToString(set);
-        try (java.io.Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(URL), "utf-8"))) {
-            writer.write(output);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Path path = Paths.get(URL);
+        byte[] strToBytes = setToString(set).getBytes();
+        Files.write(path, strToBytes);
     }
 
     void stringToFile(String payload, String URL) throws IOException {
-        try (java.io.Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream(URL), "utf-8"))) {
-            writer.write(payload);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Path path = Paths.get(URL);
+        byte[] strToBytes = payload.getBytes();
+        Files.write(path, strToBytes);
     }
 
     private String setToString(HashSet set) {
