@@ -4,24 +4,12 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 class Writer {
     List<String> getListOfURLs(String fileURL) throws IOException {
-//        List<String> list = new ArrayList<>();
-//        try (BufferedReader br = new BufferedReader(new FileReader(fileURL))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                list.add(line);
-//            }
-//            br.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return list;
         return Files.lines(Paths.get(fileURL)).collect(Collectors.toList());
     }
 

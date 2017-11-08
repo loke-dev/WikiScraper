@@ -8,12 +8,14 @@ class Builder {
         createSubFolders("HTML");
         createSubFolders("Links");
         createSubFolders("Words");
+        createSubFolders("Text");
     }
 
     void structure(String category) {
         createCategory("Links", category);
         createCategory("HTML", category);
         createCategory("Words", category);
+        createCategory("Text", category);
     }
 
     private void createRootFolder() {
