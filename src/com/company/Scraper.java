@@ -87,18 +87,38 @@ class Scraper {
         writer.setToFile(set, URL);
     }
 
-    private void extractWords(String payload, String baseURL, String fileURL, String category) throws IOException {
-        String fileName = fileURL.substring(fileURL.lastIndexOf("/") + 1, fileURL.lastIndexOf("."));
-        String URL = baseURL + "/Words/" + category + "/" + fileName + ".txt";
-        Source src = new Source(payload);
-        Renderer rend = new Renderer(src);
-
-        writer.stringToFile(rend.toString(), URL);
-    }
-
     private void extractText(String payload, String baseURL, String fileURL, String category) throws IOException {
         String fileName = fileURL.substring(fileURL.lastIndexOf("/") + 1, fileURL.lastIndexOf("."));
         String URL = baseURL + "/Text/" + category + "/" + fileName + ".txt";
+        Source src = new Source(payload);
+        Renderer rend = new Renderer(src);
+        String text = rend.toString();
+        text = text.toLowerCase();
+        text = text.replaceAll("\r", " ");
+        text = text.replaceAll("\n", " ");
+        text = text.replaceAll("<.*?>", "");
+        text = text.replaceAll("\\[.*?]", "");
+        text = text.replaceAll("d{4}-\\d{2}-\\d{2}", "");
+        text = text.replaceAll("\\.", "");
+        text = text.replaceAll(",", "");
+        text = text.replaceAll("\\?", "");
+        text = text.replaceAll(";", "");
+        text = text.replaceAll("\"", "");
+        text = text.replaceAll(":", "");
+        text = text.replaceAll("\\(", "");
+        text = text.replaceAll("\\*", "");
+        text = text.replaceAll("_", "");
+        text = text.replaceAll("!", "");
+        text = text.replaceAll("#", "");
+        text = text.replaceAll("\\)", "");
+
+        extractWords(text, baseURL, URL, category);
+        writer.stringToFile(text, URL);
+    }
+
+    private void extractWords(String payload, String baseURL, String fileURL, String category) throws IOException {
+        String fileName = fileURL.substring(fileURL.lastIndexOf("/") + 1, fileURL.lastIndexOf("."));
+        String URL = baseURL + "/Words/" + category + "/" + fileName + ".txt";
         StringBuilder contents = new StringBuilder();
 
         Matcher m = wordPattern.matcher(payload);
@@ -114,51 +134,6 @@ class Scraper {
         writer.stringToFile(contents.toString(), URL);
     }
 
-//    void links(String baseURL, String fileURL, String category) throws IOException {
-//        String fileName = fileURL.substring(fileURL.lastIndexOf("/") + 1, fileURL.lastIndexOf("."));
-//        String URL = baseURL + "/Links/" + category + "/" + fileName + ".txt";
-//        StringBuilder contents = new StringBuilder();
-//        HashSet<String> set = new HashSet<>();
-//
-//        try (BufferedReader br = new BufferedReader(new FileReader(fileURL))) {
-//            String line;
-//            while ((line = br.readLine()) != null) {
-//                contents.append(line);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-//        Matcher m = hrefPattern.matcher(contents);
-//
-//        while (!m.hitEnd()) {
-//            if (m.find()) {
-//                String match = contents.substring(m.start(), m.end());
-//                String temp = match.substring(match.indexOf("\"") + 1, match.lastIndexOf("\""));
-//                Matcher m2 = validPattern.matcher(temp);
-//                if (m2.find() && !match.contains(":")) {
-//                    String match2 = temp.substring(m2.start(), m2.end());
-//                    set.add(match2);
-//                }
-//            }
-//        }
-//        writer.setToFile(set, URL);
-//    }
-
-//    void words(String baseURL, String pageURL, String category) throws IOException {
-//        String fileName = pageURL.substring(pageURL.lastIndexOf("/") + 1);
-//        String URL = baseURL + "/Words/" + category + "/" + fileName + ".txt";
-//        StringBuilder contents = new StringBuilder();
-//        java.net.URL url = new URL("https://en.wikipedia.org" + pageURL);
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-//        String line;
-//        while ((line = reader.readLine()) != null) {
-//            contents.append(line).append("\n");
-//        }
-//        reader.close();
-//        writer.stringToFile(contents.toString(), URL);
-//    }
-
     private void html(String baseURL, String pageURL, String category) throws IOException {
         String fileName = pageURL.substring(pageURL.lastIndexOf("/") + 1);
         String URL = baseURL + "/HTML/" + category + "/" + fileName + ".txt";
@@ -171,7 +146,6 @@ class Scraper {
         }
         reader.close();
         extractLinks(contents.toString(), baseURL, URL, category);
-        extractWords(contents.toString(), baseURL, URL, category);
         extractText(contents.toString(), baseURL, URL, category);
         writer.stringToFile(contents.toString(), URL);
     }
