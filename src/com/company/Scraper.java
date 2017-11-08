@@ -51,6 +51,7 @@ class Scraper {
                 visited.add(link);
             }
         }
+
         //Scrape the pages that came from level 1 scrape (Level 2)
         List<Path> last = writer.getURL(baseURL, "/HTML");
         for (Path p : last) {
